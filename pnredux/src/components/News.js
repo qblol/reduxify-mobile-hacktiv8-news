@@ -30,18 +30,15 @@ class News extends Component {
             <TextInput
               style={styles.textInput}
               placeholder='Search here..'
-              onChangeText={keyword => this.setState({text: keyword}) }
-              value={this.state.text}
+              onChange={event => this.props.actionSearchNews(event.nativeEvent.text)}
+              value={this.props.search}
               />
           </View>
         </View>
         <ScrollView
           style={styles.content}
           >
-          {this.props.news.filter(results=>
-            (results.title === null ? '' : results.title)
-            .match(new RegExp(this.state.text,'i'))
-          ).map((item,index) =>
+          {this.props.news.map((item,index) =>
             <View key={index} style={styles.contentItem}>
               <Text style={{margin:10}}>{item.title}</Text>
             </View>
@@ -65,9 +62,14 @@ class News extends Component {
 }
 
 const mapStateToProps = state => {
+  const regex = new RegExp(state.searchNews,'i')
   return {
-    news: state.news
+    news: state.news.filter(results=> regex.test(results.title))
   }
 }
 
-export default connect(mapStateToProps)(News)
+const mapDispatchToProps = dispatch => (
+  bindActionCreators({actionSearchNews}, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(News)

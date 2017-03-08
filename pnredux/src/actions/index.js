@@ -1,10 +1,7 @@
-export const actionSearchNews = (title,news) => {
+export const actionSearchNews = (news) => {
   return {
     type: 'SEARCH_NEWS',
-    payload:{
-      title:title,
-      news:news
-    }
+    payload: news
   }
 }
 
