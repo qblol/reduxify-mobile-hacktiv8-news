@@ -9,30 +9,14 @@ import {
   Alert
 } from 'react-native'
 import { styles } from '../styles'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actionSearchNews } from '../actions'
 
-export default class News extends Component {
+class News extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      news:
-      [
-        {
-          title: 'React',
-          url: 'https://facebook.github.io/react/',
-          author: 'Jordan Walke',
-          num_comments: 3,
-          points: 4,
-          objectID: 0
-        },
-        {
-          title: 'Redux',
-          url: 'https://github.com/reactjs/redux',
-          author: 'Dan Abramov, Andrew Clark',
-          num_comments: 2,
-          points: 5,
-          objectID: 1
-        }
-      ],
       text: ''
     }
   }
@@ -54,13 +38,12 @@ export default class News extends Component {
         <ScrollView
           style={styles.content}
           >
-          {this.state.news.filter(results=>
+          {this.props.news.filter(results=>
             (results.title === null ? '' : results.title)
             .match(new RegExp(this.state.text,'i'))
-          ).map(item =>
-            <View key={item.objectID} style={styles.contentItem}>
+          ).map((item,index) =>
+            <View key={index} style={styles.contentItem}>
               <Text style={{margin:10}}>{item.title}</Text>
-              <Text style={{margin:10}}>{item.author}</Text>
             </View>
           )}
         </ScrollView>
@@ -80,3 +63,11 @@ export default class News extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    news: state.news
+  }
+}
+
+export default connect(mapStateToProps)(News)

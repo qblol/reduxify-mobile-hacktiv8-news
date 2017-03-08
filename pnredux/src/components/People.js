@@ -9,29 +9,14 @@ import {
   Alert
 } from 'react-native'
 import { styles } from '../styles'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { actionSearchPeople } from '../actions'
 
-export default class People extends Component {
+class People extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      people:
-      [
-        {
-          name: 'Iqbal'
-        },
-        {
-          name: 'Radit'
-        },
-        {
-          name: 'Timo'
-        },
-        {
-          name: 'Yoma'
-        },
-        {
-          name: 'Yoni'
-        }
-      ],
       text: ''
     }
   }
@@ -53,7 +38,7 @@ export default class People extends Component {
         <ScrollView
           style={styles.content}
           >
-          {this.state.people.filter(results=>
+          {this.props.people.filter(results=>
             (results.name === null ? '' : results.name)
             .match(new RegExp(this.state.text,'i'))
           ).map((item,index) =>
@@ -75,3 +60,11 @@ export default class People extends Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    people: state.people
+  }
+}
+
+export default connect(mapStateToProps)(People)
